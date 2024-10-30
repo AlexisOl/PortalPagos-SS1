@@ -1,12 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const usuarioRoutes = require('./Routes/Usuarios.routes');
-// Importar otras rutas aquí
+const empresaRoutes = require('./Routes/Empresa.routes');
+const nodemon = require('nodemon')
 
- app.use(express.json());
- app.use('/api/usuarios', usuarioRoutes);
-// Agrega más rutas aquí
+const ngrok = require('ngrok');
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo en el puerto 3000');
-});
+
+nodemon({
+  script: 'app.js',
+  ext: 'js json'
+})
+
+let conexionNgrok = null;
+
+
+nodemon.on('start', async () => {
+  if (!conexionNgrok) {
+    conexionNgrok = await ngrok.connect({ port: 3000 })
+    console.log(`en la direccion ${conexionNgrok}`)
+  }
+}).on('quit', async () => {
+  await ngrok.kill()
+})
