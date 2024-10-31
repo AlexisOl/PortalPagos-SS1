@@ -245,7 +245,8 @@ async function generacionPagos(cuentaEnvio, cuentaEmpresa, monto) {
 //funcion
 
 TodasTransacciones = async (req, res) => {
-
+    const [valores] = await pool.query("SELECT * FROM transacciones");
+    res.json(valores);
 }
 
 TodasTransaccionesUsuarioId = async (req, res) => {

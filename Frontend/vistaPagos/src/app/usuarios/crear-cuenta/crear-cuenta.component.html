@@ -1,0 +1,83 @@
+<app-header></app-header>
+
+<div
+  class="mt-4 mx-auto p-10 max-w-3xl flex flex-col lg:flex-row lg:space-x-8 space-y-6 lg:space-y-0"
+>
+  <!-- Formulario de Registro -->
+  <div class="w-full lg:w-1/2 max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center lg:text-left">
+      Registrar Nueva Cuenta
+    </h2>
+
+    <div>
+      <label for="idUsuario" class="block text-gray-700 font-bold mb-2"
+        >ID Usuario:</label
+      >
+      <input
+        id="idUsuario"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="number"
+        [(ngModel)]="idUsuario"
+        placeholder="ID del usuario"
+      />
+    </div>
+
+    <div>
+      <label for="codigo" class="block text-gray-700 font-bold mb-2"
+        >Código cuenta:</label
+      >
+      <input
+        id="codigo"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="text"
+        [(ngModel)]="this.codigo"
+        placeholder="Código de la cuenta"
+      />
+    </div>
+
+    <div>
+      <label for="pin" class="block text-gray-700 font-bold mb-2">PIN:</label>
+      <input
+        id="pin"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="password"
+        [(ngModel)]="this.pin"
+        placeholder="PIN de la cuenta"
+      />
+    </div>
+
+    <div>
+      <label
+        for="id_tipoCuentaAsociadas"
+        class="block text-gray-700 font-bold mb-2"
+      >
+        ID Tipo de Cuenta Asociada:
+      </label>
+      <input
+        id="id_tipoCuentaAsociadas"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="number"
+        [(ngModel)]="this.idTipoCuenta"
+        placeholder="ID del tipo de cuenta"
+      />
+    </div>
+
+    <button
+      class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 w-full font-semibold"
+      (click)="this.generacionCuenta()"
+    >
+      Registrar Cuenta
+    </button>
+  </div>
+
+  <!-- Tarjeta de Información del Usuario -->
+  <div class="w-full lg:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-bold mb-4 text-center lg:text-left">
+      Detalles de la Cuenta
+    </h2>
+    <div class="space-y-3">
+      <p><strong>ID Tipo de Cuenta Asociada:</strong> 1 - Tarjeta de crédito</p>
+      <p><strong>ID Tipo de Cuenta Asociada:</strong> 2 - Cuenta bancaria</p>
+    </div>
+  </div>
+</div>

@@ -13,15 +13,50 @@
         </tr>
       </thead>
       <tbody>
-        @for (user of usuarios; track $index) {
         <tr>
-          <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
+          <td>{{ usuario[0].id }}</td>
+          <td>{{ usuario[0].nombreUsuario }}</td>
+          <td>{{ usuario[0].correo }}</td>
+          <td>{{ usuario[0].id_tipo === 2 ? "cliente" : "Empresa" }}</td>
         </tr>
-        }
       </tbody>
     </table>
   </div>
+</div>
+
+<hr />
+<div>
+  <h2 class="text-2xl font-bold mb-4">Detalles de la Cuenta</h2>
+  <table class="min-w-full bg-white border border-gray-300">
+    <thead>
+      <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+        <th class="py-2 px-4 border-b">ID</th>
+        <th class="py-2 px-4 border-b">Código de Cuenta Bancaria</th>
+        <th class="py-2 px-4 border-b">ID Tipo de Cuenta</th>
+        <th class="py-2 px-4 border-b">ID Usuario</th>
+        <th class="py-2 px-4 border-b">Fecha de Creación</th>
+        <th class="py-2 px-4 border-b">Monto</th>
+        <th class="py-2 px-4 border-b">Número de Cuenta</th>
+        <th class="py-2 px-4 border-b">PIN</th>
+        <th class="py-2 px-4 border-b">Tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="py-2 px-4 border-b">{{ cuenta.id }}</td>
+        <td class="py-2 px-4 border-b">
+          {{ cuenta.id_codigoCuentasBancarias }}
+        </td>
+        <td class="py-2 px-4 border-b">{{ cuenta.id_tipoCuentaAsociadas }}</td>
+        <td class="py-2 px-4 border-b">{{ cuenta.id_usuario }}</td>
+        <td class="py-2 px-4 border-b">
+          {{ cuenta.fecha_creacion | date : "short" }}
+        </td>
+        <td class="py-2 px-4 border-b">{{ cuenta.monto }}</td>
+        <td class="py-2 px-4 border-b">{{ cuenta.id_cuentaBancaria }}</td>
+        <td class="py-2 px-4 border-b">{{ cuenta.pin }}</td>
+        <td class="py-2 px-4 border-b">{{ cuenta.tipo }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

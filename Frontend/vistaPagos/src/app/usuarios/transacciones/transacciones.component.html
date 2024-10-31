@@ -1,0 +1,24 @@
+<app-header></app-header>
+
+<div class="container mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Transacciones</h1>
+
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">ID Transacción</th>
+        <th class="py-2">Descripción del Error</th>
+        <th class="py-2">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of listado; track $index) {
+      <tr>
+        <td class="py-2 text-center">{{ item.id }}</td>
+        <td class="py-2 text-center">{{ item.descripcion_error }}</td>
+        <td class="py-2 text-center">{{ item.fecha_transaccion }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

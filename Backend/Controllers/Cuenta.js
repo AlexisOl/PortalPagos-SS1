@@ -17,7 +17,9 @@ creacionCuentas = async (req, res) => {
             codigo,
             pin,
             id_tipoCuentaAsociadas
-        } = req.body
+        } = req.body.cuenta
+        console.log(req.body.cuenta, "---");
+
         //verificar si esta registrado
         //generacion de transaccion 
         await pool.beginTransaction;
@@ -196,8 +198,9 @@ ObtenerCuentasEspecificasCorreo = async (req, res) => {
     try {
         const {
             correo
-        } = req.params
+        } = req.params;
         // Verificar si existe el correo
+        console.log(correo);
 
         if (!correo) {
             return res.status(400).json({

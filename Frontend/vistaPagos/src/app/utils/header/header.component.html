@@ -4,22 +4,32 @@
     <div class="text-white font-bold text-xl">E-pago</div>
     <div class="space-x-4">
       <a
-        routerLink="/"
+        routerLink="/vistaUsuario/"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
         >Inicio</a
       >
       <a
-        routerLink="/about"
+        routerLink="/vistaUsuario/crearCuenta"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
         >Registro de cuentas</a
       >
+      @if(this.token.getIdTipoUsuario()===1){
       <a
-        routerLink="/login"
+        routerLink="/vistaUsuario/transacciones"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
-        >Retiro de dinero</a
+        >transacciones</a
       >
       <a
-        routerLink="/login"
+        routerLink="/vistaUsuario/crearEmpresa"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
+        >registrar Empresa</a
+      >
+
+      }
+
+      <a
+        routerLink="/vistaUsuario/reportes"
+        routerLinkActive="active"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
         >Reportes de ingresos</a
       >
@@ -27,8 +37,9 @@
       <!--aca si se es admins-->
       <a
         routerLink="/login"
+        (click)="this.cerrarSesion()"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md"
-        >Iniciar Sesión</a
+        >Cerrar Sesión</a
       >
     </div>
   </div>

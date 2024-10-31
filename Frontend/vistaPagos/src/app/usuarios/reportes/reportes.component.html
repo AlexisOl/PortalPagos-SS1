@@ -1,0 +1,111 @@
+<app-header />
+
+<div class="container mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Reportes</h1>
+
+  <!-- Reporte de Errores en Transacciones -->
+  <h2 class="text-xl font-semibold mt-4">
+    Reporte de Errores en Transacciones
+  </h2>
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">ID Transacción</th>
+        <th class="py-2">Descripción del Error</th>
+        <th class="py-2">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (error of erroresTransacciones; track $index) {
+      <tr>
+        <td class="py-2 text-center">{{ error.id }}</td>
+        <td class="py-2 text-center">{{ error.descripcion_error }}</td>
+        <td class="py-2 text-center">{{ error.fecha_transaccion }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Reporte de Ganancias Generales -->
+  <h2 class="text-xl font-semibold mt-4">Reporte de Ganancias Generales</h2>
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">Monto Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="py-2 text-center">
+          {{ gananciasGenerales[0].monto_total }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Reporte Histórico de Movimientos de Usuario -->
+  <h2 class="text-xl font-semibold mt-4">
+    Histórico de Movimientos de Usuario
+  </h2>
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">ID Movimiento</th>
+        <th class="py-2">Tipo de Movimiento</th>
+        <th class="py-2">Monto</th>
+        <th class="py-2">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (movimiento of historicoMovimientos; track $index) {
+      <tr>
+        <td class="py-2 text-center">{{ $index }}</td>
+        <td class="py-2 text-center">{{ movimiento.tipo_movimiento }}</td>
+        <td class="py-2 text-center">{{ movimiento.monto }}</td>
+        <td class="py-2 text-center">{{ movimiento.fecha_transaccion }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Reporte de Ingresos y Egresos -->
+  <h2 class="text-xl font-semibold mt-4">Reporte de Ingresos y Egresos</h2>
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">Tipo Movimiento</th>
+        <th class="py-2">Monto Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (ingresoEgreso of ingresosEgresos; track $index) {
+
+      <tr>
+        <td class="py-2 text-center">{{ ingresoEgreso.tipo_movimiento }}</td>
+        <td class="py-2 text-center">{{ ingresoEgreso.monto_total }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Reporte de Usuarios por Estado -->
+  <h2 class="text-xl font-semibold mt-4">Reporte de Usuarios por Estado</h2>
+  <table class="min-w-full bg-gray-800 text-white">
+    <thead>
+      <tr>
+        <th class="py-2">ID Usuario</th>
+        <th class="py-2">Cantidad usuarios</th>
+        <th class="py-2">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (usuario of usuariosPorEstado; track $index) {
+      <tr>
+        <td class="py-2 text-center">{{ $index + 1 }}</td>
+        <td class="py-2 text-center">{{ usuario.cantidad_usuarios }}</td>
+        <td class="py-2 text-center">{{ usuario.estado }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

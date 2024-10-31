@@ -7,8 +7,8 @@ import { cuenta } from '../../../models/cuentas.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiciosCuentaService {
-  private reporteDirectiva = 'cuenta';
+export class TransaccioneServicioService {
+  private reporteDirectiva = 'transaccion';
   readonly urlIncial = environment.URL;
 
   constructor(private http: HttpClient) {}
@@ -23,11 +23,9 @@ export class ServiciosCuentaService {
   }
 
   // Método para obtener cuentas específicas por correo
-  obtenerCuentasEspecificasCorreo(correo: string | null): Observable<cuenta> {
-    return this.http.get<cuenta>(
-      `${
-        this.urlIncial + this.reporteDirectiva
-      }/ObtenerCuentasEspecificasCorreo/${correo}`
+  listadoTotal(): Observable<any> {
+    return this.http.get<any>(
+      `${this.urlIncial + this.reporteDirectiva}/ListadoTransacciones/`
     );
   }
 }
