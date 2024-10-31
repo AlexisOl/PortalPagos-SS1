@@ -1,5 +1,6 @@
 const pool = require('../Conexion/conexion');
 const metodoPagoTarjeta = require('../utils/MetodoPago');
+const metodoPagoBanco = require('../utils/MetodosBanco');
 
 creacionTransaccion = async (req, res) => {
     try {
@@ -28,7 +29,7 @@ creacionTransaccion = async (req, res) => {
         );
 
 
-        console.log(cuentaEmpresa[0]);
+        console.log(cuentaEmpresa[0], "aaa");
         //aca llamo a la funcion
         generacionPagos(empresa[0], cuentaEmpresa[0], monto)
         //  const pago = await generacionPagos(correo, monto)
@@ -69,6 +70,9 @@ async function generacionPagos(cuentaEnvio, cuentaEmpresa, monto) {
 
         // ya que se tiene el id solo verificar que tipo de cuenta es, si de banco o de tarjeta
         //tarjeta y banco
+        console.log(cuentaElectronicaEnvio[0].id_tipoCuentaAsociada,
+            cuentaElectronicaRecibo[0].id_tipoCuentaAsociadas, "--------**-*-");
+
         if (cuentaElectronicaEnvio[0].id_tipoCuentaAsociadas === 1 &&
             cuentaElectronicaRecibo[0].id_tipoCuentaAsociadas === 2
         ) {
@@ -83,6 +87,8 @@ async function generacionPagos(cuentaEnvio, cuentaEmpresa, monto) {
             console.log(estadoTransaccion);
 
             //cobro para el cliente
+            // aca le establezco el monto en base a la tarjeta
+            let cantidadRecibe = monto - monto * (0.013)
             if (estadoTransaccion !== false) {
                 // se debe de generar
                 console.log("-------------------");
@@ -112,7 +118,7 @@ async function generacionPagos(cuentaEnvio, cuentaEmpresa, monto) {
                         1,
                         cuentaElectronicaRecibo[0].id,
                         1,
-                        monto,
+                        cantidadRecibe,
                         "Motivo de transaccion desde tarjeta"
                     ]
                 );
@@ -141,33 +147,79 @@ async function generacionPagos(cuentaEnvio, cuentaEmpresa, monto) {
         else if (cuentaElectronicaEnvio[0].id_tipoCuentaAsociadas === 2 &&
             cuentaElectronicaRecibo[0].id_tipoCuentaAsociadas === 2
         ) {
-            //cobro para el cliente
-            const [cobro] = await pool.query(
-                `INSERT INTO transacciones 
+            const determinarEstado = await metodoPagoBanco.determinarDisponibilidadCobroBanco(monto, cuentaEnvio.correo)
+            console.log(determinarEstado);
+            if (determinarEstado.data.saldoSuficiente) {
+                //generacion del cobro
+
+
+                // generacion del ingreso
+
+                ////////////*------------------------
+                ////////////*------------------------
+                ////////////*------------------------
+                //cobro para el cliente
+                // aca le establezco el monto en base a la tarjeta
+                let cantidadRecibe = monto - monto * (0.013)
+                // se debe de generar
+                console.log("-------------------");
+                console.log(cuentaElectronicaEnvio[0].id, cuentaElectronicaRecibo[0].id);
+
+
+                const [cobro] = await pool.query(
+                    `INSERT INTO transacciones 
             (id_estadoTransacciones, id_cuentasElectronicas, id_tipoMovimiento, monto, descripcion_error) 
             VALUES (?, ?, ?, ?, ?)`,
-                [1, cuentaElectronicaEnvio[0].id, 2, monto, "Motivo de transaccion por banco"]
-            );
+                    [
+                        1,
+                        cuentaElectronicaEnvio[0].id,
+                        2,
+                        monto,
+                        "Motivo de transaccion ingreso al banco"
+                    ]
+                );
 
-            //pago para la empresa
-            const [pago] = await pool.query(
-                `INSERT INTO transacciones 
+                const generarRetiro = await metodoPagoBanco.retiroCobroBanco(monto, cuentaEnvio.correo, "Motivo de transaccion ingreso al banco")
+
+                console.log("-PAGO------------------");
+
+                //pago para la empresa
+                const [pago] = await pool.query(
+                    `INSERT INTO transacciones 
             (id_estadoTransacciones, id_cuentasElectronicas, id_tipoMovimiento, monto, descripcion_error) 
             VALUES (?, ?, ?, ?, ?)`,
-                [
-                    1,
-                    cuentaElectronicaRecibo[0].id,
-                    1,
-                    monto,
-                    "Motivo de transaccion desde un banco"
-                ]
-            );
-            console.log('Transacción insertada con ID:', cobro.insertId, pago.insertId);
+                    [
+                        1,
+                        cuentaElectronicaRecibo[0].id,
+                        1,
+                        cantidadRecibe,
+                        "Motivo de transaccion ingreso al banco"
+                    ]
+                );
+                console.log('Transacción insertada con ID:', cobro.insertId, pago.insertId);
+                const generarIngreso = await metodoPagoBanco.ingresoCobroBanco(monto, cuentaEnvio.correo, "Motivo de transaccion ingreso al banco")
 
-            //luego de que se genera se debera de crear un valor de monto
-            return {
-                message: 'Transacción registrada exitosamente'
-            };
+                //luego de que se genera se debera de crear un valor de monto
+                return {
+                    message: 'Transacción registrada exitosamente'
+                };
+
+
+            } else {
+                const [cobro] = await pool.query(
+                    `INSERT INTO transacciones 
+            (id_estadoTransacciones, id_cuentasElectronicas, id_tipoMovimiento, monto, descripcion_error) 
+            VALUES (?, ?, ?, ?, ?)`,
+                    [2, cuentaElectronicaEnvio[0].id, 2, monto, "Motivo de transaccion fallida por banco"]
+                );
+
+                return {
+                    message: 'Transacción fallida no exite el elemento',
+                    cobro
+                };
+            }
+
+
         } // cualquier otra opcion no se puede
         else {
             console.error('Error al insertar transacción:', error);
