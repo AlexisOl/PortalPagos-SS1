@@ -6,5 +6,7 @@ rutas.get('/todosTipoUsuarios', usuarioController.getTiposUsuario);
 rutas.post('/registroUsuarios', usuarioController.registroUsuarios);
 rutas.post('/registroUsuariosLogin', usuarioController.registroLoginUsuarios);
 rutas.post('/login', usuarioController.login);
+rutas.get('/usuarioEspecifico/:id', usuarioController.usuarioPorId);
+
 
 module.exports = rutas

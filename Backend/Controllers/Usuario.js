@@ -30,26 +30,36 @@ getTiposUsuario = async (req, res) => {
 };
 
 //registro para usuarios
-
+////// 
+////// esto tambien ya desde el registro
  registroUsuarios = async (req, res) => {
     // obtiene los datos
-    const { nombre, id_empresa, password } = req.body;
+    const { nombre, codigo_empresa, password, tipo } = req.body;
     try {
         // Comienza transacción
         await pool.beginTransaction;
-
-        // Verifica si la empresa existe
+        
+              // Verifica si la empresa existe y la crea
         const [tipoCorrecto] = await pool.query(
-            "SELECT COUNT(*) AS cantidad FROM empresa e WHERE e.id_empresa = ?", [id_empresa]
+            "SELECT COUNT(*) AS cantidad FROM empresa e WHERE e.codigo_empresa = ?", [codigo_empresa]
         );
 
         if (tipoCorrecto[0].cantidad === 1) {
             // Encripta la contraseña
             const hashedPassword = await bcrypt.hash(password, 10); 
-
+            const [valorEmpresa] = await pool.query(
+            "SELECT * from empresa e  WHERE e.codigo_empresa = ?", [codigo_empresa]
+                    );
+            
+            
+            console.log(valorEmpresa[0]);
+            //genera el correo de la empresa
+            const correo = nombre + "@" + codigo_empresa + ".com"
+            
+            //inserta al usuario
             const [result] = await pool.query(
-                'INSERT INTO usuarios (nombreUsuario, contrasenia, id_tipo, id_empresa) VALUES (?, ?, ?, ?)',
-                [nombre, hashedPassword, 2, id_empresa]
+                'INSERT INTO usuarios (nombreUsuario, contrasenia, id_tipo, id_empresa, correo) VALUES (?, ?, ?, ?, ?)',
+                [nombre, hashedPassword, tipo, valorEmpresa[0].id_empresa, correo]
             );
 
             // Si la inserción es exitosa
@@ -60,6 +70,9 @@ getTiposUsuario = async (req, res) => {
             await pool.rollback;
             return res.status(400).json({ error: 'ID de empresa no válido' });
         }
+            
+        
+      
     } catch (error) {
         console.log(error);
         await pool.rollback; 
@@ -70,8 +83,7 @@ getTiposUsuario = async (req, res) => {
 
 
 registroLoginUsuarios = async (req, res) => {
-         const { cardNumber, pin } = req.body
-
+        const { cardNumber, pin } = req.body
     try {
     // ir a buscar si existe en el otro servicio
         // para ello jalar el valor del localstorage
@@ -108,15 +120,16 @@ registroLoginUsuarios = async (req, res) => {
 }
 
 //funcion de login
+//////////// esto ya
 login = async (req, res) => {
     try {
-        const { nombreUsuario, contrasenia } = req.body;
+        const { correo, contrasenia } = req.body;
 
-        if (!nombreUsuario || !contrasenia) {
+        if (!correo || !contrasenia) {
             return res.status(400).json({ error: 'Nombre de usuario y contraseña son requeridos' });
         }
         //busca al usuario
-        const [[usuario]] = await pool.query('SELECT * FROM usuarios WHERE nombreUsuario = ?', [nombreUsuario]);
+        const [[usuario]] = await pool.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
         if (!usuario) {
             return res.status(401).json({ error: 'Credenciales inválidas' });
         }
@@ -140,21 +153,44 @@ login = async (req, res) => {
                 id: usuario.id,
                 nombreUsuario: usuario.nombreUsuario,
                 id_tipo: usuario.id_tipo,
-                id_empresa: usuario.id_empresa
+                id_empresa: usuario.id_empresa,
+                correo: usuario.correo
             }
         });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error en el servidor' });
     }
 };
 
+// para obtener a los usuario por id
+// ya 
+usuarioPorId = async(req, res) =>{
 
+    try {
+    const { id } = req.params;
+
+        const [valores] = await pool.query(
+            "Select * from usuarios WHERE id =  ?", [id]
+        )
+
+        if (valores) {
+            res.status(200).json({ message: 'Usuario encontrado' , usuario: valores});
+            
+        }
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
 
 module.exports = {
     getUsuariosPorEstado: getUsuariosPorEstado,
     getTiposUsuario: getTiposUsuario,
     registroUsuarios: registroUsuarios,
     registroLoginUsuarios: registroLoginUsuarios,
-    login
+    login,
+    usuarioPorId
 }
