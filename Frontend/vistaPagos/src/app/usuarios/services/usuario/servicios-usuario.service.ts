@@ -17,4 +17,21 @@ export class ServiciosUsuarioService {
       `${this.urlIncial + this.reporteDirectiva}/usuarioEspecifico/${id}`
     );
   }
+
+  registrarUsuario(
+    nombre: any,
+    codigo: any,
+    password: any,
+    tipoUsuario: any
+  ): Observable<any> {
+    return this.http.post(
+      `${this.urlIncial + this.reporteDirectiva}/registroUsuarios`,
+      {
+        nombre,
+        codigo_empresa: codigo,
+        password,
+        tipo: tipoUsuario,
+      }
+    );
+  }
 }

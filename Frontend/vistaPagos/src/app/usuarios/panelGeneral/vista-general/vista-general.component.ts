@@ -5,11 +5,12 @@ import { ServiciosAuthService } from '../../../auth/services/servicios-auth.serv
 import { ServiciosCuentaService } from '../../services/cuenta/servicios-cuenta.service';
 import { cuenta } from '../../../models/cuentas.interface';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vista-general',
   standalone: true,
-  imports: [HeaderComponent, DatePipe],
+  imports: [HeaderComponent, DatePipe, FormsModule],
   templateUrl: './vista-general.component.html',
   styleUrl: './vista-general.component.scss',
 })

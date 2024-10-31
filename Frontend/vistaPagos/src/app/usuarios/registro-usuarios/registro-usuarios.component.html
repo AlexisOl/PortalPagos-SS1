@@ -1,58 +1,58 @@
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
-  <form
-    (ngSubmit)="onSubmit()"
-    class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-4"
+  <div
+    class="card w-full max-w-md bg-gray-800 text-white shadow-lg rounded-lg p-6"
   >
-    <h2 class="text-2xl font-bold text-center">Register</h2>
+    <h2 class="text-2xl font-bold text-center mb-6">Registro</h2>
 
     <div class="form-control w-full">
       <label class="label">
-        <span class="label-text">Username</span>
+        <span class="label-text">Nombre</span>
       </label>
       <input
         type="text"
-        formControlName="username"
-        placeholder="Enter your username"
+        [(ngModel)]="nombre"
+        placeholder="Ingrese su nombre"
         class="input input-bordered w-full"
       />
     </div>
 
-    <div class="form-control w-full">
+    <div class="form-control w-full mt-4">
       <label class="label">
-        <span class="label-text">Email</span>
+        <span class="label-text">Código de Empresa</span>
       </label>
       <input
-        type="email"
-        formControlName="email"
-        placeholder="Enter your email"
+        type="text"
+        [(ngModel)]="codigo"
+        placeholder="Ingrese el código de empresa"
         class="input input-bordered w-full"
       />
     </div>
 
-    <div class="form-control w-full">
+    <div class="form-control w-full mt-4">
       <label class="label">
-        <span class="label-text">Password</span>
-      </label>
-      <input
-        type="password"
-        formControlName="password"
-        placeholder="Enter your password"
-        class="input input-bordered w-full"
-      />
-    </div>
-
-    <div class="form-control w-full">
-      <label class="label">
-        <span class="label-text">Confirm Password</span>
+        <span class="label-text">Contraseña</span>
       </label>
       <input
         type="password"
-        formControlName="confirmPassword"
-        placeholder="Confirm your password"
+        [(ngModel)]="password"
+        placeholder="Ingrese una contraseña"
         class="input input-bordered w-full"
       />
     </div>
 
-    <button type="submit" class="btn btn-primary w-full">Register</button>
-  </form>
+    <div class="form-control w-full mt-4">
+      <label class="label">
+        <span class="label-text">Tipo de Usuario</span>
+      </label>
+      <select class="select w-full" [(ngModel)]="tipoUsuario">
+        <option disabled selected>Seleccione el tipo</option>
+        <option>Empresa</option>
+        <option>Usuario</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary w-full mt-6" (click)="registrarUsuuario()">
+      Registrar
+    </button>
+  </div>
 </div>

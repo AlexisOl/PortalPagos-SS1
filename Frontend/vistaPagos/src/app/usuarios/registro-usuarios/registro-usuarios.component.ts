@@ -1,29 +1,33 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
+import { ServiciosUsuarioService } from '../services/usuario/servicios-usuario.service';
 
 @Component({
   selector: 'app-registro-usuarios',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './registro-usuarios.component.html',
   styleUrl: './registro-usuarios.component.scss',
 })
 export class RegistroUsuariosComponent {
-  registrationForm: FormGroup;
+  nombre: any;
+  codigo: any;
+  password: any;
+  tipoUsuario: any;
 
-  constructor(private fb: FormBuilder) {
-    this.registrationForm = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-    });
-  }
+  constructor(private usuario: ServiciosUsuarioService) {}
 
-  onSubmit() {
-    if (this.registrationForm.valid) {
-      console.log('User data', this.registrationForm.value);
-      // Aquí puedes enviar los datos al servidor.
-    }
+  registrarUsuuario() {
+    console.log(this.nombre, this.codigo, this.password, this.tipoUsuario);
+    let valor = this.tipoUsuario === 'Empresa' ? 3 : 2;
+
+    this.usuario
+      .registrarUsuario(this.nombre, this.codigo, this.password, valor)
+      .subscribe();
   }
 }

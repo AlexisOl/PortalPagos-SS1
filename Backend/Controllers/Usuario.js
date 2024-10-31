@@ -63,9 +63,9 @@ registroUsuarios = async (req, res) => {
             );
 
 
-            console.log(valorEmpresa[0]);
+            console.log(valorEmpresa[0] + "----------------");
             //genera el correo de la empresa
-            const correo = nombre + "@" + nombre + ".com"
+            const correo = nombre + "@" + valorEmpresa[0].nombre_empresa + ".com"
 
             //inserta al usuario
             const [result] = await pool.query(
